@@ -23,13 +23,8 @@ export default {
       // - LocalStorage 에 저장 (setItem 메소드)
       //   localStorage.setItem(key, value);
       if(this.newTodoItem === null) return;
-      
-      var obj = {
-        completed: false,
-        item: this.newTodoItem,
-      };
-      localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
-      
+      // this.$emit('이벤트이름', 인자1, 인자2);
+      this.$emit('addTodo', this.newTodoItem);
       this.clearInput();
     },
     clearInput: function() {

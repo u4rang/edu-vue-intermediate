@@ -1,9 +1,19 @@
 <template>
   <div id="app">
     <TodoHeader></TodoHeader>
-    <TodoInput></TodoInput>
-    <TodoList></TodoList>
-    <TodoFooter></TodoFooter>
+    <!-- <TodoInput v-on:하위 컴포넌트에서 발생시킨 이벤트 이름="현재 컴포넌트의 메소드명"></TodoInput> -->
+    <TodoInput v-on:addTodo="addOneItem"></TodoInput>
+    <!-- <TodoList v-bind:내려보낼 프롭스 속성 이름=현재 위치 속성 이름></TodoList> -->
+    <TodoList 
+      v-bind:propsdata="todoItems"
+      v-on:removeTodo="removeOneItem"
+      v-on:toggleTodo="toggleOneItem"
+      >
+    </TodoList>
+    <TodoFooter
+      v-on:clearAllTodo="clearAllItem"
+      >
+    </TodoFooter>
   </div>
 </template>
 
@@ -14,6 +24,54 @@ import TodoList from "./components/TodoList.vue"
 import TodoFooter from "./components/TodoFooter.vue"
 
 export default {
+  data: function(){
+    return {
+      todoItems: []
+    };
+  },
+  
+  methods: {
+    addOneItem: function(todoItem) {
+      var obj = {
+        completed: false,
+        item: todoItem,
+      };
+      localStorage.setItem(todoItem, JSON.stringify(obj));
+      this.todoItems.push(obj);
+    },
+    removeOneItem: function(todoItem, index){
+      localStorage.removeItem(todoItem.item);
+      this.todoItems.splice(index, 1);
+    },
+    toggleOneItem: function(todoItem, index){
+      // console.log(todoItem, index);
+      // todoItem.completed = !todoItem.completed;
+      this.todoItems[index].completed = !this.todoItems[index].completed
+      // Update LocalStorage
+      localStorage.removeItem(todoItem.item);
+      localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+    },
+    clearAllItem: function(){
+      localStorage.clear();
+      this.todoItems = [];
+    },
+  },
+
+  // 1.View Life Cycle에서 Created 상태
+  created: function() {
+    if(localStorage.length == 0) return;
+    
+    for(var i = 0; i < localStorage.length; ++i){
+      if(!localStorage.key(i) !== 'loglevel:webpack-dev-server'){
+        // console.log(typeof localStorage.getItem(localStorage.key(i)));
+        // console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
+        this.todoItems.push(JSON.parse(localStorage.getItem(localStorage.key(i))));
+      }
+      
+      // console.log(localStorage.key(i));
+    }
+  },
+
   components: {
     //'컴포넌트 태그 명' : 컴포넌트 내용
     'TodoHeader' : TodoHeader,
