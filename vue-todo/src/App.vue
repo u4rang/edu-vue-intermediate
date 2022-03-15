@@ -24,26 +24,26 @@ import TodoList from "./components/TodoList.vue"
 import TodoFooter from "./components/TodoFooter.vue"
 
 export default {
-  data: function(){
+  data(){
     return {
       todoItems: []
     };
   },
   
   methods: {
-    addOneItem: function(todoItem) {
-      var obj = {
+    addOneItem(todoItem) {
+      const obj = {
         completed: false,
         item: todoItem,
       };
       localStorage.setItem(todoItem, JSON.stringify(obj));
       this.todoItems.push(obj);
     },
-    removeOneItem: function(todoItem, index){
+    removeOneItem(todoItem, index){
       localStorage.removeItem(todoItem.item);
       this.todoItems.splice(index, 1);
     },
-    toggleOneItem: function(todoItem, index){
+    toggleOneItem(todoItem, index){
       // console.log(todoItem, index);
       // todoItem.completed = !todoItem.completed;
       this.todoItems[index].completed = !this.todoItems[index].completed
@@ -51,17 +51,17 @@ export default {
       localStorage.removeItem(todoItem.item);
       localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
     },
-    clearAllItem: function(){
+    clearAllItem(){
       localStorage.clear();
       this.todoItems = [];
     },
   },
 
   // 1.View Life Cycle에서 Created 상태
-  created: function() {
+  created() {
     if(localStorage.length == 0) return;
     
-    for(var i = 0; i < localStorage.length; ++i){
+    for(let i = 0; i < localStorage.length; ++i){
       if(!localStorage.key(i) !== 'loglevel:webpack-dev-server'){
         // console.log(typeof localStorage.getItem(localStorage.key(i)));
         // console.log(JSON.parse(localStorage.getItem(localStorage.key(i))));
@@ -73,11 +73,11 @@ export default {
   },
 
   components: {
-    //'컴포넌트 태그 명' : 컴포넌트 내용
-    'TodoHeader' : TodoHeader,
-    'TodoInput' : TodoInput,
-    'TodoList' : TodoList,
-    'TodoFooter' : TodoFooter,
+  //'컴포넌트 태그 명' : 컴포넌트 내용
+    TodoHeader,
+    TodoInput,
+    TodoList,
+    TodoFooter,
   }
 }
 </script>
