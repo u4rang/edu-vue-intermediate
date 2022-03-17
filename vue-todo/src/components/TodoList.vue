@@ -25,14 +25,8 @@ export default {
     }),
   },
   computed: {
-    // todoItems() {
-    //   return this.$store.getters.storedTodoItems;
-    // }
     ...mapState(['todoItems']),
     ...mapGetters(['storedTodoItems']),
-    // ...mapGetters({
-    //   todoItems: 'storedTodoItems'
-    // })
   }
   
 }
